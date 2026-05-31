@@ -18,7 +18,26 @@ Vibe Notch 是一款 macOS 菜单栏应用，为 Claude Code CLI 会话提供类
 
 ## 安装
 
-### 从源码构建
+### 方式一：下载预编译版本（推荐）
+
+1. 前往 [Releases 页面](https://github.com/hunterlarcuad/vibe-notch/releases)
+2. 下载 `Vibe-Notch-*-arm64-with-installer.zip`
+3. 解压后双击 `install.command` 一键安装
+
+### 方式二：手动安装
+
+```bash
+# 解压 zip
+unzip Vibe-Notch-*.zip
+
+# 复制到应用程序目录
+cp -R "Vibe Notch.app" /Applications/
+
+# 移除安全隔离
+xattr -dr com.apple.quarantine "/Applications/Vibe Notch.app"
+```
+
+### 方式三：从源码构建
 
 ```bash
 # 1. 克隆仓库
@@ -30,16 +49,14 @@ xcodebuild -scheme ClaudeIsland -configuration Release build
 
 # 3. 复制到应用程序目录
 cp -R "$(find ~/Library/Developer/Xcode/DerivedData -name 'Vibe Notch.app' -path '*/Release/*' | head -1)" /Applications/
+
+# 4. 移除安全隔离
+xattr -dr com.apple.quarantine "/Applications/Vibe Notch.app"
 ```
 
 ### 安装后首次运行
 
-由于使用 ad-hoc 签名，首次打开需移除隔离属性：
-
 ```bash
-# 移除安全隔离
-xattr -dr com.apple.quarantine "/Applications/Vibe Notch.app"
-
 # 启动应用
 open -a "Vibe Notch"
 ```
