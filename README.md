@@ -33,17 +33,42 @@
 
 ## Install
 
-Download the latest release or build from source:
+Download the latest release:
+
+👉 **[Releases 页面](https://github.com/hunterlarcuad/vibe-notch/releases)**
+
+### 一键安装
+
+1. 下载 `Vibe-Notch-*-arm64-with-installer.zip`
+2. 解压后双击 `install.command`
+3. 完成
+
+### 手动安装
 
 ```bash
+# 解压 zip
+unzip Vibe-Notch-*.zip
+# 复制到应用程序
+cp -R "Vibe Notch.app" /Applications/
+# 移除安全隔离
+xattr -dr com.apple.quarantine "/Applications/Vibe Notch.app"
+```
+
+### 从源码构建
+
+```bash
+git clone https://github.com/hunterlarcuad/vibe-notch.git
+cd vibe-notch
 xcodebuild -scheme ClaudeIsland -configuration Release build
 ```
 
-## How It Works
+## 使用说明
 
-Vibe Notch installs hooks into `~/.claude/hooks/` that communicate session state via a Unix socket. The app listens for events and displays them in the notch overlay.
+详细使用说明请参考：[docs/MAC_USER_GUIDE.md](docs/MAC_USER_GUIDE.md)
 
-When Claude needs permission to run a tool, the notch expands with approve/deny buttons—no need to switch to the terminal.
+## Privacy
+
+本 fork 版本已**完全移除** Mixpanel 数据上报，不采集任何使用数据。
 
 ## License
 
