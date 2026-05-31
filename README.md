@@ -1,3 +1,5 @@
+**[中文](README_CN.md) | English**
+
 <div align="center">
   <img src="ClaudeIsland/Assets.xcassets/AppIcon.appiconset/icon_128x128.png" alt="Logo" width="100" height="100">
   <h3 align="center">Vibe Notch (previously Claude Island)</h3>
@@ -35,26 +37,26 @@
 
 Download the latest release:
 
-👉 **[Releases 页面](https://github.com/hunterlarcuad/vibe-notch/releases)**
+👉 **[Releases Page](https://github.com/hunterlarcuad/vibe-notch/releases)**
 
-### 一键安装
+### One-Click Install
 
-1. 下载 `Vibe-Notch-*-arm64-with-installer.zip`
-2. 解压后双击 `install.command`
-3. 完成
+1. Download `Vibe-Notch-*-arm64-with-installer.zip`
+2. Unzip and double-click `install.command`
+3. Done!
 
-### 手动安装
+### Manual Install
 
 ```bash
-# 解压 zip
+# Unzip
 unzip Vibe-Notch-*.zip
-# 复制到应用程序
+# Copy to Applications
 cp -R "Vibe Notch.app" /Applications/
-# 移除安全隔离
+# Remove quarantine attribute
 xattr -dr com.apple.quarantine "/Applications/Vibe Notch.app"
 ```
 
-### 从源码构建
+### Build from Source
 
 ```bash
 git clone https://github.com/hunterlarcuad/vibe-notch.git
@@ -62,13 +64,13 @@ cd vibe-notch
 xcodebuild -scheme ClaudeIsland -configuration Release build
 ```
 
-## 使用说明
+## Usage
 
-详细使用说明请参考：[docs/MAC_USER_GUIDE.md](docs/MAC_USER_GUIDE.md)
+For detailed usage instructions, see: [docs/MAC_USER_GUIDE.md](docs/MAC_USER_GUIDE.md)
 
 ## Privacy
 
-本 fork 版本已**完全移除** Mixpanel 数据上报，不采集任何使用数据。
+This fork has **completely removed** Mixpanel analytics. No usage data is collected.
 
 ## License
 

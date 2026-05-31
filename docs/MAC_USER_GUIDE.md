@@ -1,220 +1,222 @@
-# Vibe Notch - Mac 使用说明
+**[中文](MAC_USER_GUIDE_CN.md) | English**
 
-## 简介
+# Vibe Notch - Mac User Guide
 
-Vibe Notch 是一款 macOS 菜单栏应用，为 Claude Code CLI 会话提供类似 iPhone 灵动岛风格的刘海区域通知界面。启动后常驻菜单栏，无需切换窗口即可监控会话状态、审批工具权限。
+## Introduction
 
----
-
-## 环境要求
-
-| 项目 | 要求 |
-|------|------|
-| 操作系统 | macOS 15.6 或更高 |
-| 硬件 | MacBook（需有刘海设计） |
-| 依赖 | 已安装 [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) |
+Vibe Notch is a macOS menu bar app that provides Dynamic Island-style notch notifications for Claude Code CLI sessions. Once launched, it stays in the menu bar, allowing you to monitor session status and approve tool permissions without switching windows.
 
 ---
 
-## 安装
+## Requirements
 
-### 方式一：下载预编译版本（推荐）
+| Item | Requirement |
+|------|-------------|
+| OS | macOS 15.6 or later |
+| Hardware | MacBook (with notch design) |
+| Dependency | [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed |
 
-1. 前往 [Releases 页面](https://github.com/hunterlarcuad/vibe-notch/releases)
-2. 下载 `Vibe-Notch-*-arm64-with-installer.zip`
-3. 解压后双击 `install.command` 一键安装
+---
 
-### 方式二：手动安装
+## Installation
+
+### Method 1: Download Pre-built Release (Recommended)
+
+1. Go to the [Releases page](https://github.com/hunterlarcuad/vibe-notch/releases)
+2. Download `Vibe-Notch-*-arm64-with-installer.zip`
+3. Unzip and double-click `install.command` for one-click install
+
+### Method 2: Manual Install
 
 ```bash
-# 解压 zip
+# Unzip
 unzip Vibe-Notch-*.zip
 
-# 复制到应用程序目录
+# Copy to Applications
 cp -R "Vibe Notch.app" /Applications/
 
-# 移除安全隔离
+# Remove quarantine attribute
 xattr -dr com.apple.quarantine "/Applications/Vibe Notch.app"
 ```
 
-### 方式三：从源码构建
+### Method 3: Build from Source
 
 ```bash
-# 1. 克隆仓库
+# 1. Clone the repository
 git clone https://github.com/hunterlarcuad/vibe-notch.git
 cd vibe-notch
 
-# 2. 构建应用
+# 2. Build the app
 xcodebuild -scheme ClaudeIsland -configuration Release build
 
-# 3. 复制到应用程序目录
+# 3. Copy to Applications
 cp -R "$(find ~/Library/Developer/Xcode/DerivedData -name 'Vibe Notch.app' -path '*/Release/*' | head -1)" /Applications/
 
-# 4. 移除安全隔离
+# 4. Remove quarantine attribute
 xattr -dr com.apple.quarantine "/Applications/Vibe Notch.app"
 ```
 
-### 安装后首次运行
+### First Launch After Installation
 
 ```bash
-# 启动应用
+# Launch the app
 open -a "Vibe Notch"
 ```
 
 ---
 
-## 启动与退出
+## Launch & Quit
 
-### 启动方式
+### Launch Methods
 
-- **Spotlight**: `Cmd + Space` 搜索 `Vibe Notch` 回车
-- **启动台**: 在 Launchpad 中找到并点击
-- **终端**: `open -a "Vibe Notch"`
-- **开机自启**: 可在「系统设置 → 通用 → 登录项与扩展」中添加
+- **Spotlight**: `Cmd + Space`, search for `Vibe Notch` and press Enter
+- **Launchpad**: Find and click it in Launchpad
+- **Terminal**: `open -a "Vibe Notch"`
+- **Login Item**: Add it in System Settings → General → Login Items & Extensions
 
-### 应用特征
+### App Behavior
 
-- 启动后**不显示在 Dock**（LSUIElement 模式）
-- 仅在**菜单栏**显示状态图标
-- 点击菜单栏图标可打开设置面板
+- Does **NOT appear in Dock** after launch (LSUIElement mode)
+- Only shows a status icon in the **menu bar**
+- Click the menu bar icon to open the settings panel
 
-### 退出方式
+### Quit Methods
 
-- 点击菜单栏图标 → 选择「退出」
-- 或在活动监视器中强制退出 `Vibe Notch` 进程
+- Click the menu bar icon → Select "Quit"
+- Or force quit `Vibe Notch` process in Activity Monitor
 
 ---
 
-## 自动配置
+## Auto Configuration
 
-首次启动时，应用会自动完成以下配置：
+On first launch, the app automatically sets up:
 
 ```
 ~/.claude/hooks/
-├── hook.sh          # 主 hook 脚本
-└── ...              # 相关配置文件
+├── hook.sh          # Main hook script
+└── ...              # Related config files
 ```
 
-这些 hook 通过 Unix socket 与应用通信，**无需手动配置或修改**。
+These hooks communicate with the app via Unix socket — **no manual configuration needed**.
 
-如需重新安装 hooks，删除上述目录后重启应用即可。
+To reinstall hooks, delete the directory above and restart the app.
 
 ---
 
-## 核心功能
+## Core Features
 
-### 1. 刘海通知
+### 1. Notch Notifications
 
-应用启动后，会在 MacBook 刘海区域显示一个紧凑的状态指示器。当 Claude Code 有活动时，通知区域会平滑动画展开，显示当前会话信息。
+After launching, a compact status indicator appears in the MacBook notch area. When Claude Code has activity, the notification area smoothly expands to show current session information.
 
-### 2. 会话监控
+### 2. Session Monitoring
 
-| 状态 | 显示 | 说明 |
-|------|------|------|
-| 空闲 (Idle) | 灰色/静默 | 无活跃的 Claude 会话 |
-| 处理中 (Processing) | 动态指示器 | Claude 正在执行操作 |
-| 等待审批 (Waiting) | 展开通知区 | 需要用户批准工具执行 |
-| 已结束 (Ended) | 自动消失 | 会话已关闭 |
+| Status | Display | Description |
+|--------|---------|-------------|
+| Idle | Gray/Silent | No active Claude sessions |
+| Processing | Animated indicator | Claude is executing an action |
+| Waiting | Expanded notification | User approval needed for tool execution |
+| Ended | Auto-dismiss | Session has closed |
 
-支持**同时监控多个** `claude` 会话，每个会话独立显示状态。
+Supports **monitoring multiple** `claude` sessions simultaneously, each with independent status display.
 
-### 3. 权限审批
+### 3. Permission Approval
 
-当 Claude Code 需要执行工具（如写入文件、运行命令等）并需要权限时：
+When Claude Code needs to execute a tool (e.g., writing files, running commands) and requires permission:
 
-1. 刘海区域**自动展开**，显示工具名称和输入参数
-2. 点击 **「批准 (Approve)」** → 工具执行
-3. 点击 **「拒绝 (Deny)」** → 跳过该工具
+1. The notch area **auto-expands**, showing the tool name and input parameters
+2. Click **"Approve"** → Tool executes
+3. Click **"Deny"** → Tool is skipped
 
-无需切换到终端窗口，直接在刘海区域完成操作。
+No need to switch to the terminal window — complete the operation directly from the notch area.
 
-### 4. 聊天历史
+### 4. Chat History
 
-点击通知区域可查看当前会话的完整对话历史：
+Click the notification area to view the full conversation history of the current session:
 
-- 支持 **Markdown 渲染**（代码块、标题、列表等）
-- 显示工具调用过程和结果
-- 实时滚动更新
+- Supports **Markdown rendering** (code blocks, headings, lists, etc.)
+- Shows tool call processes and results
+- Real-time scrolling updates
 
-### 5. 多会话管理
+### 5. Multi-Session Management
 
-同时运行多个 `claude` 实例时（不同终端窗口），Vibe Notch 会自动识别并分别监控：
+When running multiple `claude` instances simultaneously (different terminal windows), Vibe Notch automatically detects and monitors them separately:
 
-- 每个会话独立显示项目名称
-- 点击切换查看不同会话
-- 按项目名称排序
-
----
-
-## 日常使用流程
-
-```
-1. 启动 Vibe Notch
-      ↓
-2. 打开终端，正常运行 claude 命令
-      ↓
-3. 刘海区域自动显示会话状态
-      ↓
-4. 需要审批时，刘海展开 → 点击操作
-      ↓
-5. 完成工作后，退出 Claude 或关闭应用
-```
+- Each session displays its project name independently
+- Click to switch between different sessions
+- Sorted by project name
 
 ---
 
-## 常见问题
+## Daily Usage Flow
 
-### Q: 应用启动后刘海没有显示？
+```
+1. Launch Vibe Notch
+      ↓
+2. Open terminal, run claude command as usual
+      ↓
+3. Notch area automatically shows session status
+      ↓
+4. When approval is needed, notch expands → Click action
+      ↓
+5. When done, exit Claude or close the app
+```
 
-- 确认使用的是 MacBook 且有刘海设计
-- 确认 Claude Code CLI 已安装并在终端中运行过 `claude` 命令
-- 检查 `~/.claude/hooks/` 目录下是否有 hook 文件
+---
 
-### Q: 权限审批不生效？
+## FAQ
 
-- 确认终端中的 Claude 会话仍在运行（未退出）
-- 重启应用后重试
+### Q: The notch doesn't show after launching?
 
-### Q: 应用无法启动，提示安全警告？
+- Confirm you're using a MacBook with a notch design
+- Confirm Claude Code CLI is installed and you've run `claude` in the terminal at least once
+- Check if hook files exist under `~/.claude/hooks/`
+
+### Q: Permission approvals don't work?
+
+- Confirm the Claude session in the terminal is still running (not exited)
+- Restart the app and try again
+
+### Q: App won't launch, shows security warning?
 
 ```bash
 xattr -dr com.apple.quarantine "/Applications/Vibe Notch.app"
 open -a "Vibe Notch"
 ```
 
-### Q: 如何完全卸载？
+### Q: How to completely uninstall?
 
 ```bash
-# 1. 退出应用
+# 1. Quit the app
 osascript -e 'tell application "Vibe Notch" to quit'
 
-# 2. 删除应用
+# 2. Delete the app
 rm -rf "/Applications/Vibe Notch.app"
 
-# 3. 删除 hooks
+# 3. Delete hooks
 rm -rf ~/.claude/hooks/
 
-# 4. 删除配置数据
+# 4. Delete preferences
 rm -rf ~/Library/Preferences/com.celestial.ClaudeIsland.plist
 ```
 
 ---
 
-## 隐私说明
+## Privacy
 
-本 fork 版本（hunterlarcuad/vibe-notch）已**完全移除**原项目的 Mixpanel 数据分析功能：
+This fork (hunterlarcuad/vibe-notch) has **completely removed** the original project's Mixpanel analytics:
 
-- 不采集设备标识符
-- 不上报应用使用事件
-- 不扫描 Claude Code 会话文件
-- 不收集任何版本信息
+- No device identifiers collected
+- No app usage events reported
+- No Claude Code session files scanned
+- No version information collected
 
-所有数据处理均在本地完成，无任何网络请求（除 Sparkle 自动更新检查外）。
+All data processing is done locally with no network requests (except Sparkle auto-update checks).
 
 ---
 
-## 项目信息
+## Project Info
 
-- **仓库**: https://github.com/hunterlarcuad/vibe-notch
-- **上游**: https://github.com/farouqaldori/vibe-notch
-- **许可证**: Apache 2.0
+- **Repository**: https://github.com/hunterlarcuad/vibe-notch
+- **Upstream**: https://github.com/farouqaldori/vibe-notch
+- **License**: Apache 2.0
